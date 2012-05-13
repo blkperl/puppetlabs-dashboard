@@ -4,26 +4,34 @@ Gary Larizza <gary@puppetlabs.com>
 
 This module manages and installs the Puppet Dashboard.  It also includes a Puppet Face to manage the Dashboard/Console programmatically or from the CLI
 
+# Installation
+
+This module can be obtained from the [Puppet Forge](http://forge.puppetlabs.com/puppetlabs/dashboard)
+
+You can also use the [puppet module tool](http://docs.puppetlabs.com/puppet/2.7/reference/modules_installing.html) 
+
+    `puppet module install puppetlabs/dashboard`
+
+This module uses the fact osfamily which is supported by Facter 1.6.1+
+
 # Quick Start
 
-To install the Puppet Dashboard and configure it with sane defaults, include the following in your site.pp file:
+Add the [puppet-dashboard](http://docs.puppetlabs.com/dashboard/manual/1.2/bootstrapping.html#packages) package to your internal mirrors or use the [puppetlabs mirrors](http://docs.puppetlabs.com/dashboard/manual/1.2/bootstrapping.html#packages)
 
-    node default {
-			   class {'dashboard':
-			     dashboard_ensure          => 'present',
-			     dashboard_user            => 'puppet-dbuser',
-			     dashboard_group           => 'puppet-dbgroup',
-			     dashboard_password        => 'changeme',
-			     dashboard_db              => 'dashboard_prod',
-			     dashboard_charset         => 'utf8',
-			     dashboard_site            => $fqdn,
-			     dashboard_port            => '8080',
-			     mysql_root_pw             => 'changemetoo',
-			     passenger                 => true,
-			     mysql_package_provider    => 'yum',
-		       ruby_mysql_package        => 'ruby-mysql',
-			   }
-		}
+To install the Puppet Dashboard and configure it with sane defaults, include the following in your manifest files
+
+    class { 'dashboard':
+      dashboard_ensure    => 'present',
+      dashboard_user      => 'puppet-dbuser',
+      dashboard_group     => 'puppet-dbgroup',
+      dashboard_password  => 'changeme',
+      dashboard_db        => 'dashboard_prod',
+      dashboard_charset   => 'utf8',
+      dashboard_site      => $::fqdn,
+      dashboard_port      => '8080',
+      mysql_root_pw       => 'changemetoo',
+      passenger           => true,
+    }
 
 None of these parameters are required - if you neglect any of them their values will default back to those set in the dashboard::params subclass.
 
