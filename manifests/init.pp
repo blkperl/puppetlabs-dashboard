@@ -60,7 +60,8 @@ class dashboard (
   $mysql_root_pw            = $dashboard::params::mysql_root_pw,
   $passenger                = $dashboard::params::passenger,
   $mysql_package_provider   = $dashboard::params::mysql_package_provider,
-  $ruby_mysql_package       = $dashboard::params::ruby_mysql_package
+  $ruby_mysql_package       = $dashboard::params::ruby_mysql_package,
+  $rack_version             = $dashboard::params::rack_version
 ) inherits dashboard::params {
 
   class { 'mysql': }
@@ -118,7 +119,18 @@ class dashboard (
   }
 
   package { $dashboard_package:
-    ensure => $dashboard_version,
+    ensure  => $dashboard_version,
+    require => [ Package['rdoc'], Package['rack'] ]
+  }
+
+  package { 'rdoc':
+    ensure   => present,
+    provider => gem
+  }
+
+  package { 'rack':
+    ensure   => $rack_version,
+    provider => gem
   }
 
   File {
